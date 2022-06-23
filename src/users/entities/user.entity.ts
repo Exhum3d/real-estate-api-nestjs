@@ -15,7 +15,7 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column('boolean', { default: false })
   isAdmin: boolean;
 
   @OneToOne(() => Contact)
