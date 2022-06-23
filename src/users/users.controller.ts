@@ -65,12 +65,6 @@ export class UsersController {
   @Delete(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async delete(@Param('id', ParseIntPipe) id: number) {
-    const user = await this.usersService.findOne(id);
-
-    if (!user) {
-      throw new NotFoundException('user not found!');
-    }
-
-    return this.usersService.delete(user);
+    return this.usersService.delete(id);
   }
 }
