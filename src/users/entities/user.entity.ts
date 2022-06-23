@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Contact } from "./contact.entity";
 
 @Entity()
 export class User {
@@ -17,6 +18,7 @@ export class User {
   @Column()
   isAdmin: boolean;
 
-
+  @OneToOne(() => Contact)
+  contacts: Contact
 
 }
