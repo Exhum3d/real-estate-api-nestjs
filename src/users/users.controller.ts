@@ -1,5 +1,6 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Param, ParseIntPipe, Post, UseInterceptors } from "@nestjs/common";
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Get, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, UseInterceptors } from "@nestjs/common";
 import { CreateUserDto } from "./dtos/create-user.dto";
+import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UsersService } from "./users.service";
 
 @Controller('users')
@@ -8,7 +9,14 @@ export class UsersController {
 
   @Post()
   async createUser(@Body() body: CreateUserDto) {
-    return this.usersService.create(body.firstName, body.lastName, body.email, body.phone, body.password)
+    const emailFound = await this.usersService.findByEmail(body.email);
+    console.log(emailFound)
+
+    if (emailFound) {
+      throw new BadRequestException('email already exists!');
+    }
+
+    return this.usersService.create(body.firstName, body.lastName, body.email, body.phone, body.password);
   }
 
   @Get()
@@ -20,7 +28,27 @@ export class UsersController {
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOne(id);
+    const user = await this.usersService.findOne(id);
+
+    console.log(`userul este: ${user}`);
+    if (!user) {
+      throw new NotFoundException('user not found')
+    }
+
+    return user;
+
+  }
+
+  @Patch(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
+  async update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto) {
+    const user = await this.usersService.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException('user not found!');
+    }
+
+    return this.usersService.update(user, body);
   }
 
 }
