@@ -1,4 +1,17 @@
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, UseInterceptors } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseInterceptors
+} from "@nestjs/common";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UsersService } from "./users.service";
@@ -10,7 +23,6 @@ export class UsersController {
   @Post()
   async createUser(@Body() body: CreateUserDto) {
     const emailFound = await this.usersService.findByEmail(body.email);
-    console.log(emailFound)
 
     if (emailFound) {
       throw new BadRequestException('email already exists!');
@@ -30,7 +42,6 @@ export class UsersController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const user = await this.usersService.findOne(id);
 
-    console.log(`userul este: ${user}`);
     if (!user) {
       throw new NotFoundException('user not found')
     }

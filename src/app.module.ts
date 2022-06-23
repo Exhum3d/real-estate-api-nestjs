@@ -6,12 +6,13 @@ import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [UsersModule, TypeOrmModule.forRoot({
-    type: 'sqlite',
-    database: 'db.sqlite',
-    entities: [User],
-    synchronize: true
-  })],
+  imports: [UsersModule, TypeOrmModule
+    .forRoot({
+      type: 'sqlite',
+      database: 'db.sqlite',
+      entities: [User],
+      synchronize: true
+    })],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -1,4 +1,9 @@
-import { IsAlpha, IsEmail, IsString, MaxLength } from "class-validator";
+import {
+  IsAlpha,
+  IsEmail,
+  IsString,
+  MaxLength
+} from "class-validator";
 
 export class CreateUserDto {
   @IsAlpha()
