@@ -1,5 +1,4 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Contact } from "./contact.entity";
 
 @Entity()
 export class User {
@@ -13,12 +12,16 @@ export class User {
   lastName: string;
 
   @Column()
+  email: string;
+
+  @Column()
+  phone: string;
+
+  @Column()
   password: string;
 
   @Column('boolean', { default: false })
   isAdmin: boolean;
 
-  @OneToOne(() => Contact)
-  contacts: Contact
 
 }
