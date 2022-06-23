@@ -15,6 +15,7 @@ export class Contact {
   @OneToOne(() => User, {
     cascade: true
   })
+
   @JoinColumn()
   user: User;
 }
