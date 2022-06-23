@@ -9,6 +9,9 @@ A real estate search API built with NestJS.
 - ExpressJS
 - SQLite
 
+### Entity Relationship Diagram (ERD)
+
+
 ## Installation
 
 ```bash
