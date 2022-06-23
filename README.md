@@ -13,6 +13,8 @@ A real estate search API built with NestJS.
 ![ERD](./real-estate-erd.png)
 
 ## Endpoints
+
+### Users Controller:
 - show all users:
 ```GET - http://localhost:3000/users```
 - show user by id:
