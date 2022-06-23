@@ -13,13 +13,13 @@ A real estate search API built with NestJS.
 ![ERD](./real-estate-erd.png)
 
 ## Endpoints
-- show all users
+- show all users:
 ```GET - http://localhost:3000/users```
-- show user by id
+- show user by id:
 ```GET - http://localhost:3000/users/{id}```
-- update a specific user
+- update a specific user:
 ```PATCH - http://localhost:3000/users/{id}```
-- delete a specific user
+- delete a specific user:
 ```DELETE - http://localhost:3000/users/{id}```
 
 ## Installation
