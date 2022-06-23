@@ -1,4 +1,4 @@
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Get, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, UseInterceptors } from "@nestjs/common";
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, UseInterceptors } from "@nestjs/common";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UsersService } from "./users.service";
@@ -51,4 +51,15 @@ export class UsersController {
     return this.usersService.update(user, body);
   }
 
+  @Delete(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.usersService.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException('user not found!');
+    }
+
+    return this.usersService.delete(user);
+  }
 }
