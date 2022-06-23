@@ -1,6 +1,9 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Exclude } from "class-transformer";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+
 
 @Entity()
+@Unique(['email'])
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -14,14 +17,12 @@ export class User {
   @Column()
   email: string;
 
-  @Column()
   phone: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column('boolean', { default: false })
   isAdmin: boolean;
-
-
 }
