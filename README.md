@@ -10,7 +10,7 @@ A real estate search API built with NestJS.
 - SQLite
 
 ## Entity Relationship Diagram (ERD)
-[ERD](./real-estate-erd.png)
+![ERD](./real-estate-erd.png)
 
 ## Installation
 
