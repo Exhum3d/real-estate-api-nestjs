@@ -12,7 +12,9 @@ export class Contact {
   @Column()
   phoneNumber: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, {
+    cascade: true
+  })
   @JoinColumn()
   user: User;
 }
