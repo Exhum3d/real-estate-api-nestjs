@@ -2,7 +2,7 @@
 
 A real estate search API built with NestJS.
 
-### Technologies used:
+## Technologies used:
 
 - NestJS
 - TypeORM
