@@ -1,5 +1,6 @@
 import { IsBoolean, IsCurrency, IsString, MaxLength } from "class-validator";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/users/entities/user.entity";
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ListingAddress } from "./listing-address.entity";
 
 @Entity()
@@ -25,7 +26,11 @@ export class Listing {
   @Column('boolean', { default: false })
   isRentable: boolean;
 
-  @OneToOne(() => ListingAddress)
+  // Setting up Bi-Directional One-To-One relationship
+  @OneToOne(() => ListingAddress, listingAddress => listingAddress.listing)
   listingAddress: ListingAddress;
+
+  @ManyToOne(() => User, user => user.listings, { cascade: true })
+  user: User
 
 }

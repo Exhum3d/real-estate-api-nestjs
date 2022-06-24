@@ -1,6 +1,7 @@
 import { Exclude } from "class-transformer";
 import { IsBoolean, IsEmail, IsString, MaxLength } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Listing } from "src/listings/entities/listing.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 
 @Entity()
@@ -37,4 +38,7 @@ export class User {
   @IsBoolean()
   @Column('boolean', { default: false })
   isAdmin: boolean;
+
+  @OneToMany(() => Listing, listing => listing.user)
+  listings: Listing[]
 }

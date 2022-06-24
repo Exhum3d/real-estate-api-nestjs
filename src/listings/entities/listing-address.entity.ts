@@ -33,7 +33,7 @@ export class ListingAddress {
   @Column()
   country: string;
 
-  @OneToOne(() => Listing, { cascade: true })
+  @OneToOne(() => Listing, listing => listing.listingAddress, { cascade: true })
   @JoinColumn()
   listing: Listing
 }
