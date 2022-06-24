@@ -19,10 +19,11 @@ export class ListingImage {
   description: string;
 
   @Column()
-  @IsDataURI()
+  @IsString()
   path: string;
 
   @IsNumber()
+  @Column()
   listingId: number
 
   @ManyToOne(() => Listing, listing => listing.listingImage, { onDelete: 'CASCADE' })

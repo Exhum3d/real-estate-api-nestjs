@@ -36,7 +36,7 @@ export class ListingAddress {
   @Column()
   listingId: number;
 
-  @ManyToOne(() => Listing, listing => listing.listingAddress, { onDelete: 'CASCADE' })
+  @OneToOne(() => Listing, listing => listing.listingAddress, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'listingId' })
   listing: Listing
   // @JoinColumn()
