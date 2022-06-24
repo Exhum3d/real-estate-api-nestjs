@@ -1,7 +1,7 @@
 import { IsBoolean, IsNumber, IsString, MaxLength } from "class-validator";
-import { User } from "src/users/entities/user.entity";
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ListingAddress } from "./listing-address.entity";
+import { ListingImage } from "./listing-images.entity";
 
 @Entity()
 export class Listing {
@@ -30,7 +30,6 @@ export class Listing {
   @OneToMany(() => ListingAddress, listingAddress => listingAddress.listing, { cascade: true })
   listingAddress: ListingAddress[];
 
-  // @ManyToOne(() => User, user => user.listings, { cascade: true })
-  // user: User
-
+  @OneToMany(() => ListingImage, listingImage => listingImage.listing, { cascade: true })
+  listingImage: ListingImage[];
 }
