@@ -31,5 +31,4 @@ export class ListingAddress {
   @MaxLength(50)
   @Column()
   country: string;
-
 }
