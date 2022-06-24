@@ -1,5 +1,6 @@
 import { IsBoolean, IsCurrency, IsString, MaxLength } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { ListingAddress } from "./listing-address.entity";
 
 @Entity()
 export class Listing {
@@ -23,5 +24,8 @@ export class Listing {
   @IsBoolean()
   @Column('boolean', { default: false })
   isRentable: boolean;
+
+  @OneToOne(() => ListingAddress)
+  listingAddress: ListingAddress;
 
 }

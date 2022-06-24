@@ -1,5 +1,6 @@
 import { IsString, MaxLength } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Listing } from "./listing.entity";
 
 @Entity()
 export class ListingAddress {
@@ -31,4 +32,8 @@ export class ListingAddress {
   @MaxLength(50)
   @Column()
   country: string;
+
+  @OneToOne(() => Listing, { cascade: true })
+  @JoinColumn()
+  listing: Listing
 }
