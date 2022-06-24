@@ -7,12 +7,12 @@ export class ListingsController {
   constructor(private listingsService: ListingsService) { }
 
   @Post()
-  create(@Body() body: CreateListingDto) {
-    const listing = this.listingsService.findByTitle(body.title);
+  async create(@Body() body: CreateListingDto) {
+    // const listing = await this.listingsService.findByTitle(body.title);
 
-    if (listing) {
-      throw new BadRequestException('listing already exists!')
-    }
+    // if (listing) {
+    //   throw new BadRequestException('listing already exists!')
+    // }
 
     return this.listingsService.create(body);
   }

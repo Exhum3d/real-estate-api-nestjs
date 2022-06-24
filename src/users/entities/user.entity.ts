@@ -39,6 +39,6 @@ export class User {
   @Column('boolean', { default: false })
   isAdmin: boolean;
 
-  @OneToMany(() => Listing, listing => listing.user)
-  listings: Listing[]
+  // @OneToMany(() => Listing, listing => listing.user)
+  // listings: Listing[]
 }
