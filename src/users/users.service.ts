@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { UpdateUserDto } from "./dtos/update-user.dto";
 import { User } from "./entities/user.entity";
 
 @Injectable()
@@ -44,10 +43,10 @@ export class UsersService {
       throw new NotFoundException('user not found!');
     }
 
-
     if (attrs.email !== undefined && attrs.email !== user.email) {
       throw new BadRequestException(`can't modify email!`)
     }
+
     Object.assign(user, attrs);
 
     return this.userRepository.save(user);
