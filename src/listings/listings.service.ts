@@ -69,4 +69,16 @@ export class ListingsService {
     return this.listingImagesRepository.save(createdImage);
   }
 
+
+  async removeImage(id: number) {
+    const image = await this.listingImagesRepository.findOneBy({ id: id });
+
+    if (!image) {
+      throw new NotFoundException('image not found!')
+    }
+
+    return this.listingImagesRepository.remove(image);
+
+  }
+
 }

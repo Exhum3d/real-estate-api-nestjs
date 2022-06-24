@@ -22,4 +22,9 @@ export class ListingsController {
   async remove(@Param('id', ParseIntPipe) id: number) {
     return this.listingsService.remove(id);
   }
+
+  @Delete('images/:id')
+  async removeImage(@Param('id', ParseIntPipe) id: number) {
+    return this.listingsService.removeImage(id);
+  }
 }
