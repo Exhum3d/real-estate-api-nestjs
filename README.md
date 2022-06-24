@@ -1,6 +1,6 @@
 ## Description
 
-A real estate search API built with NestJS.
+A real estate search REST API built with NestJS.
 
 ## Technologies used:
 
