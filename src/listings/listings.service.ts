@@ -21,7 +21,6 @@ export class ListingsService {
     }
 
     const listing = this.listingsRepository.create({ title, description, price });
-
     await this.listingsRepository.save(listing);
 
     const savedListing = await this.listingsRepository.findOneBy({ title: title });
@@ -31,14 +30,29 @@ export class ListingsService {
     }
 
     const listingAddress = this.listingAddressRepository.create({ listingId: savedListing.id, city, streetName, streetNumber, country, zipCode });
-
     await this.listingAddressRepository.save(listingAddress);
+
+    delete (listingAddress.id)
+    delete (savedListing.id)
+    delete (listingAddress.listingId)
 
     return Object.assign(savedListing, listingAddress);
   }
 
   async findByTitle(title: string) {
     return this.listingsRepository.findBy({ title: title });
+  }
+
+  async remove(id: number) {
+
+    const listing = await this.listingsRepository.findOneBy({ id: id });
+
+    if (!listing) {
+      throw new NotFoundException('listing not found!')
+    }
+
+    return this.listingsRepository.remove(listing);
+
   }
 
 }

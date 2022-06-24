@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Post } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Delete, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { CreateListingDto } from "./dtos/create-listing.dto";
 import { ListingsService } from "./listings.service";
 
@@ -8,12 +8,11 @@ export class ListingsController {
 
   @Post()
   async create(@Body() body: CreateListingDto) {
-    // const listing = await this.listingsService.findByTitle(body.title);
-
-    // if (listing) {
-    //   throw new BadRequestException('listing already exists!')
-    // }
-
     return this.listingsService.create(body);
+  }
+
+  @Delete(':id')
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return this.listingsService.remove(id);
   }
 }

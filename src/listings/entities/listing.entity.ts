@@ -27,7 +27,7 @@ export class Listing {
   isRentable: boolean;
 
 
-  @OneToMany(() => ListingAddress, listingAddress => listingAddress.listing)
+  @OneToMany(() => ListingAddress, listingAddress => listingAddress.listing, { cascade: true })
   listingAddress: ListingAddress[];
 
   // @ManyToOne(() => User, user => user.listings, { cascade: true })
