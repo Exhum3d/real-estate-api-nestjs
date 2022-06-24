@@ -53,18 +53,13 @@ export class UsersController {
   @Patch(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto) {
-    const user = await this.usersService.findOne(id);
-
-    if (!user) {
-      throw new NotFoundException('user not found!');
-    }
-
-    return this.usersService.update(user, body);
+    return this.usersService.update(id, body);
   }
 
   @Delete(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async delete(@Param('id', ParseIntPipe) id: number) {
+
     return this.usersService.delete(id);
   }
 }

@@ -1,5 +1,6 @@
 import {
   IsAlpha,
+  IsEmail,
   IsOptional,
   IsString,
   MaxLength
@@ -15,6 +16,10 @@ export class UpdateUserDto {
   @MaxLength(30)
   @IsOptional()
   lastName: string;
+
+  @IsOptional()
+  @IsEmail()
+  email: string;
 
   @IsString()
   @IsOptional()

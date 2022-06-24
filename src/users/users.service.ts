@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UpdateUserDto } from "./dtos/update-user.dto";
@@ -24,14 +24,30 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    return this.userRepository.findOneBy({ id: id });
+    const user = this.userRepository.findOneBy({ id: id });
+
+    if (!user) {
+      throw new NotFoundException('user not found!');
+    }
+
+    return user;
   }
 
   async findByEmail(email: string) {
     return this.userRepository.findOneBy({ email: email });
   }
 
-  async update(user: UpdateUserDto, attrs: Partial<User>) {
+  async update(id: number, attrs: Partial<User>) {
+    const user = await this.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException('user not found!');
+    }
+
+
+    if (attrs.email !== undefined && attrs.email !== user.email) {
+      throw new BadRequestException(`can't modify email!`)
+    }
     Object.assign(user, attrs);
 
     return this.userRepository.save(user);
