@@ -1,8 +1,7 @@
-import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Patch, Post, UseInterceptors } from "@nestjs/common";
 import { CreateListingDto } from "./dtos/create-listing.dto";
 import { StoreImagesDto } from "./dtos/store-images.dto";
 import { UpdateListingDto } from "./dtos/update-listing.dto";
-import { ListingAddress } from "./entities/listing-address.entity";
 import { ListingImage } from "./entities/listing-images.entity";
 import { Listing } from "./entities/listing.entity";
 import { ListingsService } from "./listings.service";
@@ -12,7 +11,13 @@ export class ListingsController {
   constructor(private listingsService: ListingsService) { }
 
   @Post()
-  async createListing(@Body() body: CreateListingDto): Promise<Listing & ListingAddress> {
+  async createListing(@Body() body: CreateListingDto): Promise<Listing> {
+    const listing = await this.listingsService.findOneByTitle(body.title);
+
+    if (listing) {
+      throw new BadRequestException('listing already exists');
+    }
+
     return this.listingsService.create(body);
   }
 

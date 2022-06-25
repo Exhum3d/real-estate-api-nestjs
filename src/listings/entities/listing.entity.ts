@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsString, MaxLength } from "class-validator";
+import { IsBoolean, IsNumber, IsString, MaxLength, ValidateNested } from "class-validator";
 import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ListingAddress } from "./listing-address.entity";
 import { ListingImage } from "./listing-images.entity";
@@ -27,6 +27,7 @@ export class Listing {
   isRentable: boolean;
 
 
+  @ValidateNested()
   @OneToOne(() => ListingAddress, listingAddress => listingAddress.listing, { cascade: true })
   listingAddress: ListingAddress;
 

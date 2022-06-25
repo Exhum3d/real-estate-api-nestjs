@@ -11,7 +11,6 @@ import { Listing } from "./entities/listing.entity";
 export class ListingsService {
   constructor(
     @InjectRepository(Listing) private listingsRepository: Repository<Listing>,
-    @InjectRepository(ListingAddress) private listingAddressRepository: Repository<ListingAddress>,
     @InjectRepository(ListingImage) private listingImagesRepository: Repository<ListingImage>,
 
   ) { }
@@ -25,13 +24,7 @@ export class ListingsService {
     streetName,
     country,
     zipCode
-  }: CreateListingDto): Promise<Partial<Listing>> {
-
-    const listingToValidate = await this.listingsRepository.findOne({ where: { title: title }, relations: ['listingAddress'] });
-
-    if (listingToValidate) {
-      throw new BadRequestException(`cannot duplicate listing's title`);
-    }
+  }: CreateListingDto): Promise<Listing> {
 
     const listing = this.listingsRepository.create({
       title,
@@ -46,26 +39,19 @@ export class ListingsService {
       }
     });
 
-    await this.listingsRepository.save(listing);
-
-    const { id: listingAddressId, listingId, ...remainingListingAddress } = listing.listingAddress;
-    const { id, ...remainingListing } = listing;
-
-    return Object.assign(remainingListing, remainingListingAddress);
+    return this.listingsRepository.save(listing);
   }
 
   async findAll(): Promise<Listing[]> {
-    const listings = await this.listingsRepository.find({ relations: ['listingAddress'] });
-
-    listings.forEach(e => delete (e.listingAddress.listingId));
-
-    return listings;
+    return this.listingsRepository.find({ relations: ['listingAddress'] });
   }
 
   async findOneById(id: number): Promise<Listing> {
-    const listing = await this.listingsRepository.findOne({ where: { id: id }, relations: ['listingAddress'] });
+    return this.listingsRepository.findOne({ where: { id: id }, relations: ['listingAddress'] });
+  }
 
-    delete (listing.listingAddress.listingId);
+  async findOneByTitle(title: string): Promise<Listing> {
+    const listing = await this.listingsRepository.findOne({ where: { title: title }, relations: ['listingAddress'] });
 
     return listing;
   }
