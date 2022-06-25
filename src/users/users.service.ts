@@ -11,25 +11,20 @@ export class UsersService {
     lastName: string,
     email: string,
     phone: string,
-    password: string) {
+    password: string): Promise<User> {
 
     const user = this.userRepository.create({ firstName, lastName, email, phone, password });
 
     return this.userRepository.save(user);
   }
 
-  async findAll() {
+
+  async findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
 
   async findOne(id: number) {
-    const user = this.userRepository.findOneBy({ id: id });
-
-    if (!user) {
-      throw new NotFoundException('user not found!');
-    }
-
-    return user;
+    return this.userRepository.findOneBy({ id: id });
   }
 
   async findByEmail(email: string) {
@@ -38,14 +33,6 @@ export class UsersService {
 
   async update(id: number, attrs: Partial<User>) {
     const user = await this.findOne(id);
-
-    if (!user) {
-      throw new NotFoundException('user not found!');
-    }
-
-    if (attrs.email !== undefined && attrs.email !== user.email) {
-      throw new BadRequestException(`can't modify email!`)
-    }
 
     Object.assign(user, attrs);
 

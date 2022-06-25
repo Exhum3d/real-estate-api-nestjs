@@ -16,7 +16,17 @@ export class ListingsService {
 
   ) { }
 
-  async create({ title, description, price, city, streetNumber, streetName, country, zipCode }: CreateListingDto): Promise<Listing & ListingAddress> {
+  async create({
+    title,
+    description,
+    price,
+    city,
+    streetNumber,
+    streetName,
+    country,
+    zipCode
+  }: CreateListingDto): Promise<Listing & ListingAddress> {
+
     const listingToValidate = await this.listingsRepository.findOneBy({ title: title });
 
     if (listingToValidate) {
@@ -33,6 +43,7 @@ export class ListingsService {
     }
 
     const listingAddress = this.listingAddressRepository.create({ listingId: savedListing.id, city, streetName, streetNumber, country, zipCode });
+
     await this.listingAddressRepository.save(listingAddress);
 
     delete (listingAddress.id)
@@ -45,19 +56,11 @@ export class ListingsService {
   async findAll(): Promise<Listing[]> {
     const listings = await this.listingsRepository.find();
 
-    if (!listings) {
-      throw new NotFoundException('listings not found!')
-    }
-
     return listings;
   }
 
   async remove(id: number): Promise<Listing> {
     const listing = await this.listingsRepository.findOneBy({ id: id });
-
-    if (!listing) {
-      throw new NotFoundException('listing not found!')
-    }
 
     return this.listingsRepository.remove(listing);
 
@@ -84,10 +87,6 @@ export class ListingsService {
     const image = await this.listingImagesRepository.findOne({
       where: { id: imageId, listingId: listingId },
     });
-
-    if (!image) {
-      throw new NotFoundException('image not found!')
-    }
 
     return this.listingImagesRepository.remove(image);
   }

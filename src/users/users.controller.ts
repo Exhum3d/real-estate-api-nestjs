@@ -14,6 +14,7 @@ import {
 } from "@nestjs/common";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
+import { User } from "./entities/user.entity";
 import { UsersService } from "./users.service";
 
 @Controller('users')
@@ -21,7 +22,7 @@ export class UsersController {
   constructor(private usersService: UsersService) { }
 
   @Post()
-  async createUser(@Body() body: CreateUserDto) {
+  async createUser(@Body() body: CreateUserDto): Promise<User> {
     const emailFound = await this.usersService.findByEmail(body.email);
 
     if (emailFound) {
@@ -33,13 +34,13 @@ export class UsersController {
 
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
-  async findAll() {
+  async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
     const user = await this.usersService.findOne(id);
 
     if (!user) {
@@ -52,14 +53,23 @@ export class UsersController {
 
   @Patch(':id')
   @UseInterceptors(ClassSerializerInterceptor)
-  async update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto) {
-    return this.usersService.update(id, body);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto): Promise<User> {
+    const user = await this.usersService.update(id, body);
+
+    if (!user) {
+      throw new NotFoundException('user not found!');
+    }
+
+    if (body.email !== undefined && body.email !== user.email) {
+      throw new BadRequestException(`can't modify email!`)
+    }
+
+    return user;
   }
 
   @Delete(':id')
   @UseInterceptors(ClassSerializerInterceptor)
-  async delete(@Param('id', ParseIntPipe) id: number) {
-
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.usersService.delete(id);
   }
 }
