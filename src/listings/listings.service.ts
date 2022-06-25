@@ -70,8 +70,10 @@ export class ListingsService {
   }
 
 
-  async removeImage(id: number) {
-    const image = await this.listingImagesRepository.findOneBy({ id: id });
+  async removeImage(listingId: number, imageId: number) {
+    const image = await this.listingImagesRepository.findOne({
+      where: { id: imageId, listingId: listingId },
+    });
 
     if (!image) {
       throw new NotFoundException('image not found!')

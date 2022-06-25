@@ -8,7 +8,7 @@ export class ListingsController {
   constructor(private listingsService: ListingsService) { }
 
   @Post()
-  async create(@Body() body: CreateListingDto) {
+  async createListing(@Body() body: CreateListingDto) {
     return this.listingsService.create(body);
   }
 
@@ -23,8 +23,9 @@ export class ListingsController {
     return this.listingsService.remove(id);
   }
 
-  @Delete('images/:id')
-  async removeImage(@Param('id', ParseIntPipe) id: number) {
-    return this.listingsService.removeImage(id);
+
+  @Delete(':listingId/images/:imageId')
+  async removeImage(@Param('listingId', ParseIntPipe) listingId: number, @Param('imageId', ParseIntPipe) imageId: number) {
+    return this.listingsService.removeImage(listingId, imageId);
   }
 }
