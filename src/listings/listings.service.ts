@@ -54,7 +54,11 @@ export class ListingsService {
   }
 
   async findAll(): Promise<Listing[]> {
-    return this.listingsRepository.find();
+    const listings = await this.listingsRepository.find({ relations: ['listingAddress'] });
+
+    listings.forEach(e => delete (e.listingAddress.listingId));
+
+    return listings;
   }
 
   async findOneById(id: number): Promise<Listing> {
