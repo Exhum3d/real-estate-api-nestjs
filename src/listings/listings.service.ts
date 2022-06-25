@@ -62,7 +62,11 @@ export class ListingsService {
   }
 
   async findOneById(id: number): Promise<Listing> {
-    return this.listingsRepository.findOneBy({ id: id });
+    const listing = await this.listingsRepository.findOne({ where: { id: id }, relations: ['listingAddress'] });
+
+    delete (listing.listingAddress.listingId);
+
+    return listing;
   }
 
   async findOneImage(listingId: number, imageId: number): Promise<ListingImage> {

@@ -36,7 +36,7 @@ export class ListingsController {
   }
 
   @Get()
-  async getAllListings(): Promise<Listing[]> {
+  async showAllListings(): Promise<Listing[]> {
     const listings = await this.listingsService.findAll();
 
     if (!listings) {
@@ -44,6 +44,17 @@ export class ListingsController {
     }
 
     return listings;
+  }
+
+  @Get(':id')
+  async showOneListing(@Param('id', ParseIntPipe) id: number): Promise<Listing> {
+    const listing = this.listingsService.findOneById(id);
+
+    if (!listing) {
+      throw new NotFoundException('listing not found!');
+    }
+
+    return listing;
   }
 
 
