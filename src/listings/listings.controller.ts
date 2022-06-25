@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { CreateListingDto } from "./dtos/create-listing.dto";
 import { StoreImagesDto } from "./dtos/store-images.dto";
 import { ListingAddress } from "./entities/listing-address.entity";
@@ -20,7 +20,19 @@ export class ListingsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() body: StoreImagesDto): Promise<ListingImage> {
 
-    return this.listingsService.storeImages(id, body);
+    const listing = await this.listingsService.findOneById(id);
+
+    if (!listing) {
+      throw new NotFoundException('listing not found!')
+    }
+
+    const image = await this.listingsService.storeImages(id, body);
+
+    if (!image) {
+      throw new BadRequestException('image could not be saved');
+    }
+
+    return image;
   }
 
   @Get()
@@ -52,12 +64,12 @@ export class ListingsController {
     @Param('listingId', ParseIntPipe) listingId: number,
     @Param('imageId', ParseIntPipe) imageId: number): Promise<ListingImage> {
 
-    const image = await this.listingsService.removeImage(listingId, imageId);
+    const image = await this.listingsService.findOneImage(listingId, imageId);
 
     if (!image) {
       throw new NotFoundException('image not found!')
     }
 
-    return image;
+    return this.listingsService.removeImage(image);
   }
 }

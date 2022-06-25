@@ -54,40 +54,30 @@ export class ListingsService {
   }
 
   async findAll(): Promise<Listing[]> {
-    const listings = await this.listingsRepository.find();
+    return this.listingsRepository.find();
+  }
 
-    return listings;
+  async findOneById(id: number): Promise<Listing> {
+    return this.listingsRepository.findOneBy({ id: id });
+  }
+
+  async findOneImage(listingId: number, imageId: number): Promise<ListingImage> {
+    return this.listingImagesRepository.findOne({ where: { id: imageId, listingId: listingId } })
   }
 
   async remove(id: number): Promise<Listing> {
     const listing = await this.listingsRepository.findOneBy({ id: id });
 
     return this.listingsRepository.remove(listing);
-
   }
 
   async storeImages(id: number, { title, description, path }: StoreImagesDto): Promise<ListingImage> {
-    const listing = await this.listingsRepository.findOneBy({ id: id });
-
-    if (!listing) {
-      throw new NotFoundException('listing not found!')
-    }
-
     const createdImage = this.listingImagesRepository.create({ title, description, path, listingId: id })
-
-    if (!createdImage) {
-      throw new BadRequestException('image could not be saved');
-    }
 
     return this.listingImagesRepository.save(createdImage);
   }
 
-
-  async removeImage(listingId: number, imageId: number): Promise<ListingImage> {
-    const image = await this.listingImagesRepository.findOne({
-      where: { id: imageId, listingId: listingId },
-    });
-
+  async removeImage(image: ListingImage): Promise<ListingImage> {
     return this.listingImagesRepository.remove(image);
   }
 }
