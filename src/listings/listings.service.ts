@@ -25,26 +25,33 @@ export class ListingsService {
     streetName,
     country,
     zipCode
-  }: CreateListingDto): Promise<Listing & ListingAddress> {
+  }: CreateListingDto): Promise<Partial<Listing>> {
 
-    const listingToValidate = await this.listingsRepository.findOneBy({ title: title });
+    const listingToValidate = await this.listingsRepository.findOne({ where: { title: title }, relations: ['listingAddress'] });
 
     if (listingToValidate) {
       throw new BadRequestException(`cannot duplicate listing's title`);
     }
 
-    const listing = this.listingsRepository.create({ title, description, price });
+    const listing = this.listingsRepository.create({
+      title,
+      description,
+      price,
+      listingAddress: {
+        city,
+        streetNumber,
+        streetName,
+        zipCode,
+        country
+      }
+    });
+
     await this.listingsRepository.save(listing);
 
-    const listingAddress = this.listingAddressRepository.create({ listingId: listing.id, city, streetName, streetNumber, country, zipCode });
+    const { id: listingAddressId, listingId, ...remainingListingAddress } = listing.listingAddress;
+    const { id, ...remainingListing } = listing;
 
-    await this.listingAddressRepository.save(listingAddress);
-
-    delete (listingAddress.id)
-    delete (listing.id)
-    delete (listingAddress.listingId)
-
-    return Object.assign(listing, listingAddress);
+    return Object.assign(remainingListing, remainingListingAddress);
   }
 
   async findAll(): Promise<Listing[]> {
@@ -67,12 +74,12 @@ export class ListingsService {
     return this.listingImagesRepository.findOne({ where: { id: imageId, listingId: listingId } })
   }
 
-  async updateListing(id: number, body: Partial<Listing>): Promise<Listing> {
+  async updateListing(id: number, attrs: Partial<Listing>): Promise<Listing> {
     const listing = await this.listingsRepository.findOne({ where: { id: id }, relations: ['listingAddress'] });
 
-    const { title, description, price, ...rest } = body;
+    const { title, description, price, ...listingAddress } = attrs;
 
-    Object.assign(listing.listingAddress, rest);
+    Object.assign(listing.listingAddress, listingAddress);
     Object.assign(listing, { title, description, price });
 
     return this.listingsRepository.save(listing);
