@@ -67,6 +67,19 @@ export class ListingsService {
     return this.listingImagesRepository.findOne({ where: { id: imageId, listingId: listingId } })
   }
 
+  async updateListing(id: number, body: Partial<Listing>): Promise<Listing> {
+    const listing = await this.listingsRepository.findOne({ where: { id: id }, relations: ['listingAddress'] });
+
+    const { title, description, price, ...rest } = body;
+
+    Object.assign(listing.listingAddress, rest);
+    Object.assign(listing, { title, description, price });
+
+    return this.listingsRepository.save(listing);
+
+
+  }
+
   async remove(id: number): Promise<Listing> {
     const listing = await this.listingsRepository.findOneBy({ id: id });
 

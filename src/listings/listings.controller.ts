@@ -1,6 +1,7 @@
-import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
 import { CreateListingDto } from "./dtos/create-listing.dto";
 import { StoreImagesDto } from "./dtos/store-images.dto";
+import { UpdateListingDto } from "./dtos/update-listing.dto";
 import { ListingAddress } from "./entities/listing-address.entity";
 import { ListingImage } from "./entities/listing-images.entity";
 import { Listing } from "./entities/listing.entity";
@@ -56,6 +57,19 @@ export class ListingsController {
 
     return listing;
   }
+
+  @Patch(':id')
+  async updateListing(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateListingDto) {
+    const listing = await this.listingsService.updateListing(id, body);
+
+    if (!listing) {
+      throw new NotFoundException('listing not found!');
+    }
+
+    return listing;
+
+  }
+
 
 
   @Delete(':id')

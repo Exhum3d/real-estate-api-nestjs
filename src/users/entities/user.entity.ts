@@ -1,7 +1,6 @@
 import { Exclude } from "class-transformer";
 import { IsBoolean, IsEmail, IsString, MaxLength } from "class-validator";
-import { Listing } from "src/listings/entities/listing.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 
 @Entity()
