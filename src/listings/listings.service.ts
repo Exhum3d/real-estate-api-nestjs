@@ -36,21 +36,15 @@ export class ListingsService {
     const listing = this.listingsRepository.create({ title, description, price });
     await this.listingsRepository.save(listing);
 
-    const savedListing = await this.listingsRepository.findOneBy({ title: title });
-
-    if (!savedListing) {
-      throw new NotFoundException('something went wrong during the saving of listing details');
-    }
-
-    const listingAddress = this.listingAddressRepository.create({ listingId: savedListing.id, city, streetName, streetNumber, country, zipCode });
+    const listingAddress = this.listingAddressRepository.create({ listingId: listing.id, city, streetName, streetNumber, country, zipCode });
 
     await this.listingAddressRepository.save(listingAddress);
 
     delete (listingAddress.id)
-    delete (savedListing.id)
+    delete (listing.id)
     delete (listingAddress.listingId)
 
-    return Object.assign(savedListing, listingAddress);
+    return Object.assign(listing, listingAddress);
   }
 
   async findAll(): Promise<Listing[]> {
