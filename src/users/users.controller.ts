@@ -25,7 +25,7 @@ import { UsersService } from "./users.service";
 export class UsersController {
   constructor(private usersService: UsersService) { }
 
-  @Post()
+  @Post('signup')
   async signup(@Body() body: CreateUserDto): Promise<User> {
     let user = await this.usersService.findByUsername(body.username);
 
@@ -61,22 +61,18 @@ export class UsersController {
 
   }
 
-  @Patch(':id')
+  @Patch('myprofile')
   @UseGuards(AuthenticatedGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  async update(@Param('id', ParseIntPipe) id: number, @Request() req: any, @Body() body: UpdateUserDto): Promise<User> {
-
-    if (id !== req.user.id) {
-      throw new ForbiddenException('you are not authorized!')
-    }
-
+  async update(@Request() req: any, @Body() body: UpdateUserDto): Promise<User> {
     let user = await this.usersService.findOne(req.user.id);
 
+    console.log(req)
     if (!user) {
       throw new NotFoundException('user not found!');
     }
 
-    user = await this.usersService.findByEmail(req.email);
+    user = await this.usersService.findByEmail(req.user.email);
 
     if (user && user.email === body.email) {
       throw new BadRequestException('email already exists');
