@@ -7,7 +7,7 @@ import { AuthService } from "./auth.service";
 export class LocalStrategy extends PassportStrategy(Strategy) {
 
   constructor(private authService: AuthService) {
-    super(); // config
+    super();
   }
 
   async validate(username: string, password: string) {
