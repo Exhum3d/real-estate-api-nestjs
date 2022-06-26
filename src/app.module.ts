@@ -8,6 +8,7 @@ import { Listing } from './listings/entities/listing.entity';
 import { ListingsModule } from './listings/listings.module';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { UsersModule } from './users/users.module';
         ListingImage,
       ],
       synchronize: true
-    })],
+    }),
+    AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

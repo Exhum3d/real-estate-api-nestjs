@@ -9,5 +9,6 @@ import { UsersService } from './users.service';
     .forFeature([User])],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService]
 })
 export class UsersModule { }
