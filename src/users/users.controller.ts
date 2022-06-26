@@ -23,13 +23,15 @@ export class UsersController {
 
   @Post()
   async signup(@Body() body: CreateUserDto): Promise<User> {
-    const user = await this.usersService.findByUsername(body.username);
+    let user = await this.usersService.findByUsername(body.username);
 
-    if (user.username === body.username) {
+    if (user && user.username === body.username) {
       throw new BadRequestException('username already exists!');
     }
 
-    if (user.email === body.email) {
+    user = await this.usersService.findByEmail(body.email);
+
+    if (user && user.email === body.email) {
       throw new BadRequestException('email is already taken!')
     }
 
@@ -58,10 +60,16 @@ export class UsersController {
   @Patch(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto): Promise<User> {
-    const user = await this.usersService.findOne(id);
+    let user = await this.usersService.findOne(id);
 
     if (!user) {
       throw new NotFoundException('user not found!');
+    }
+
+    user = await this.usersService.findByEmail(body.email);
+
+    if (user && user.email === body.email) {
+      throw new BadRequestException('email already exists');
     }
 
     return this.usersService.update(id, body);

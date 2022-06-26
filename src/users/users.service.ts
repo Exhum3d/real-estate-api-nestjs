@@ -24,11 +24,15 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<User> {
     return this.userRepository.findOneBy({ id: id });
   }
 
-  async findByUsername(username: string) {
+  async findByEmail(email: string): Promise<User> {
+    return this.userRepository.findOneBy({ email: email });
+  }
+
+  async findByUsername(username: string): Promise<User> {
     return this.userRepository.findOneBy({ username: username });
   }
 
