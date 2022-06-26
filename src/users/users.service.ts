@@ -28,16 +28,16 @@ export class UsersService {
     return this.userRepository.findOneBy({ id: id });
   }
 
-  async findByEmail(email: string) {
-    return this.userRepository.findOneBy({ email: email });
-  }
-
   async findByUsername(username: string) {
     return this.userRepository.findOneBy({ username: username });
   }
 
   async update(id: number, attrs: Partial<User>) {
     const user = await this.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
 
     Object.assign(user, attrs);
 
