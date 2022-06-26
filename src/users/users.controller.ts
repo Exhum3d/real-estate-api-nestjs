@@ -22,14 +22,14 @@ export class UsersController {
   constructor(private usersService: UsersService) { }
 
   @Post()
-  async createUser(@Body() body: CreateUserDto): Promise<User> {
-    const emailFound = await this.usersService.findByEmail(body.email);
+  async signup(@Body() body: CreateUserDto): Promise<User> {
+    const user = await this.usersService.findByUsername(body.username);
 
-    if (emailFound) {
-      throw new BadRequestException('email already exists!');
+    if (user) {
+      throw new BadRequestException('username already exists!');
     }
 
-    return this.usersService.create(body.firstName, body.lastName, body.email, body.phone, body.password);
+    return this.usersService.create(body.firstName, body.lastName, body.email, body.username, body.phone, body.password);
   }
 
   @Get()

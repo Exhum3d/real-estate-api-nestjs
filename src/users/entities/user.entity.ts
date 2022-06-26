@@ -19,6 +19,11 @@ export class User {
   @Column()
   lastName: string;
 
+  @IsString()
+  @MaxLength(15)
+  @Column()
+  username: string;
+
   @IsEmail()
   @Column()
   email: string;

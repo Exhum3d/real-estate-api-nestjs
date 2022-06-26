@@ -8,12 +8,11 @@ export class AppController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Request() req) {
-    console.log(req.user)
+  login(@Request() req): any {
     return req.user;
   }
 
-  @Get()
+  @Get('protected')
   getHello(): string {
     return this.appService.getHello();
   }
