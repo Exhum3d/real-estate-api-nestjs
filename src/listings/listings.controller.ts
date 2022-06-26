@@ -1,4 +1,15 @@
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Patch, Post, UseInterceptors } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from "@nestjs/common";
 import { CreateListingDto } from "./dtos/create-listing.dto";
 import { StoreImagesDto } from "./dtos/store-images.dto";
 import { UpdateListingDto } from "./dtos/update-listing.dto";
@@ -65,14 +76,19 @@ export class ListingsController {
 
   @Patch(':id')
   async updateListing(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateListingDto) {
-    const listing = await this.listingsService.updateListing(id, body);
+    let listing = await this.listingsService.findOneByTitle(body.title);
+
+    if (listing) {
+      throw new BadRequestException('a listing with the same title already exists');
+    }
+
+    listing = await this.listingsService.updateListing(id, body);
 
     if (!listing) {
       throw new NotFoundException('listing not found!');
     }
 
     return listing;
-
   }
 
 

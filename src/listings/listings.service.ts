@@ -69,8 +69,6 @@ export class ListingsService {
     Object.assign(listing, { title, description, price });
 
     return this.listingsRepository.save(listing);
-
-
   }
 
   async remove(id: number): Promise<Listing> {
