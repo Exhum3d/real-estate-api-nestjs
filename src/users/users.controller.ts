@@ -4,14 +4,18 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  Request,
+  UseGuards,
   UseInterceptors
 } from "@nestjs/common";
+import { AuthenticatedGuard } from "src/auth/authenticated.guard";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
 import { User } from "./entities/user.entity";
@@ -58,21 +62,27 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthenticatedGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  async update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto): Promise<User> {
-    let user = await this.usersService.findOne(id);
+  async update(@Param('id', ParseIntPipe) id: number, @Request() req: any, @Body() body: UpdateUserDto): Promise<User> {
+
+    if (id !== req.user.id) {
+      throw new ForbiddenException('you are not authorized!')
+    }
+
+    let user = await this.usersService.findOne(req.user.id);
 
     if (!user) {
       throw new NotFoundException('user not found!');
     }
 
-    user = await this.usersService.findByEmail(body.email);
+    user = await this.usersService.findByEmail(req.email);
 
     if (user && user.email === body.email) {
       throw new BadRequestException('email already exists');
     }
 
-    return this.usersService.update(id, body);
+    return this.usersService.update(req.user.id, body);
   }
 
   @Delete(':id')
