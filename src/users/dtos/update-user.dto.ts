@@ -3,8 +3,10 @@ import {
   IsEmail,
   IsOptional,
   IsString,
-  MaxLength
+  MaxLength,
+  ValidateNested
 } from "class-validator";
+import { RoleEnum } from "../entities/role.enum";
 
 export class UpdateUserDto {
   @IsAlpha()
@@ -30,4 +32,8 @@ export class UpdateUserDto {
   @MaxLength(30)
   @IsOptional()
   password: string;
+
+  @IsOptional()
+  role: RoleEnum;
+
 }

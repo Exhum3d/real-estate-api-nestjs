@@ -1,7 +1,7 @@
 import { Exclude } from "class-transformer";
 import { IsBoolean, IsEmail, IsString, MaxLength } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
-
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { RoleEnum } from "./role.enum";
 
 @Entity()
 @Unique(['username', 'email'])
@@ -43,6 +43,12 @@ export class User {
   @Column('boolean', { default: false })
   isAdmin: boolean;
 
+  @Column({
+    type: 'enum',
+    enum: RoleEnum,
+    default: RoleEnum.USER
+  })
+  role: RoleEnum;
   // @OneToMany(() => Listing, listing => listing.user)
   // listings: Listing[]
 }

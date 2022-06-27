@@ -4,7 +4,6 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Delete,
-  ForbiddenException,
   Get,
   NotFoundException,
   Param,
@@ -18,7 +17,9 @@ import {
 import { AuthenticatedGuard } from "src/auth/authenticated.guard";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
+import { RoleEnum } from "./entities/role.enum";
 import { User } from "./entities/user.entity";
+import { Roles } from "./roles.decorator";
 import { UsersService } from "./users.service";
 
 @Controller('users')
@@ -82,6 +83,8 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @Roles(RoleEnum.ADMIN)
+  @UseGuards(AuthenticatedGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async delete(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.usersService.delete(id);

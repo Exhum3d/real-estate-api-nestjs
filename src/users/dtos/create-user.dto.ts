@@ -2,8 +2,9 @@ import {
   IsAlpha,
   IsEmail,
   IsString,
-  MaxLength
+  MaxLength,
 } from "class-validator";
+import { RoleEnum } from "../entities/role.enum";
 
 export class CreateUserDto {
   @IsAlpha()
@@ -29,4 +30,6 @@ export class CreateUserDto {
   @IsString()
   @MaxLength(30)
   password: string;
+
+  role: RoleEnum;
 }

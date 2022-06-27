@@ -12,9 +12,19 @@ export class UsersService {
     email,
     username,
     phone,
-    password }): Promise<User> {
+    password,
+    role
+  }): Promise<User> {
 
-    const user = this.userRepository.create({ firstName, lastName, email, username, phone, password });
+    const user = this.userRepository.create({
+      firstName,
+      lastName,
+      email,
+      username,
+      phone,
+      password,
+      role
+    });
 
     return this.userRepository.save(user);
   }

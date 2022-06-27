@@ -9,26 +9,23 @@ import { ListingsModule } from './listings/listings.module';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { Role } from './users/entities/role.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './users/roles.guard';
+import { configService } from 'config/config.service';
 
 @Module({
   imports: [
     UsersModule,
     ListingsModule,
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'db.sqlite',
-      entities: [
-        User,
-        Role,
-        Listing,
-        ListingAddress,
-        ListingImage,
-      ],
-      synchronize: true
-    }),
+    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     AuthModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    }
+  ],
 })
 export class AppModule { }
