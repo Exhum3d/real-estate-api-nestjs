@@ -9,6 +9,7 @@ import { ListingsModule } from './listings/listings.module';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { Role } from './users/entities/role.entity';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthModule } from './auth/auth.module';
       database: 'db.sqlite',
       entities: [
         User,
+        Role,
         Listing,
         ListingAddress,
         ListingImage,

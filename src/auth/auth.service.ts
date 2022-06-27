@@ -9,7 +9,7 @@ export class AuthService {
     const user = await this.usersService.findByUsername(username);
 
     if (user && user.password === password) {
-      const { password, email, ...result } = user;
+      const { password, ...result } = user;
 
       return result;
     }
